@@ -1,0 +1,19 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  background: linear-gradient(to bottom right, #ece9e6, #ffffff); /* Gradient background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: transparent;
+}

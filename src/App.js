@@ -3,7 +3,7 @@ import SavingsForm from "./SavingsForm";
 import SavingsInfo from "./SavingsInfo";
 import AddToSavingsForm from "./AddToSavingsForm";
 import BottomBar from "./BottomBar";
-import { useMediaQuery } from "@mui/material"; // Import useMediaQuery hook
+import { useMediaQuery, useTheme } from "@mui/material";
 import './index.css'
 import {
   Container,
@@ -22,31 +22,34 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function App() {
-  const [savingsList, setSavingsList] = useState(null);
+  const [savingsList, setSavingsList] = useState([]);
   const [currentSaving, setCurrentSaving] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationSeverity, setNotificationSeverity] = useState("success");
 
-  // Use the useMediaQuery hook to detect if the screen width is below 600px (mobile size)
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const buttonStyles = {
+    height: 50,
+    borderRadius: 8,
+    fontWeight: 600,
+    fontSize: { xs: "1rem", sm: "1.125rem" },
+  };
 
-  // Load savings from localStorage on component mount
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   useEffect(() => {
     const storedSavings = localStorage.getItem("savingsList");
     if (storedSavings) {
       setSavingsList(JSON.parse(storedSavings));
     } else {
-      setSavingsList([]); // If nothing is in localStorage, initialize with an empty array
+      setSavingsList([]);
     }
   }, []);
 
-  // Update localStorage whenever savingsList changes
   useEffect(() => {
-    if (savingsList !== null) {
-      localStorage.setItem("savingsList", JSON.stringify(savingsList));
-    }
+    localStorage.setItem("savingsList", JSON.stringify(savingsList));
   }, [savingsList]);
 
   const handleFormSubmit = (name, goalAmount, goalDueDate, savedAmount) => {
@@ -127,7 +130,6 @@ function App() {
   };
 
   if (savingsList === null) {
-    // Return a loader or nothing while waiting for localStorage to load
     return <div>Loading...</div>;
   }
 
@@ -138,7 +140,7 @@ function App() {
           variant="h4"
           align="center"
           gutterBottom
-          sx={{ fontSize: { xs: "1.75rem", sm: "2.125rem" } }}
+          sx={{ fontSize: { xs: "1.75rem", sm: "2.125rem" }, fontWeight: 500 }}
         >
           Savings Tracker App
         </Typography>
@@ -147,14 +149,13 @@ function App() {
           <>
             <SavingsForm onFormSubmit={handleFormSubmit} />
 
-            {/* Conditionally render View Savings List button based on whether it's mobile or not */}
             {!isMobile && (
               <Button
-                variant="outlined"
-                color="secondary"
+                variant="contained"
+                color="primary"
                 onClick={toggleDrawer}
                 fullWidth
-                sx={{ mt: 2, height: 50 }}
+                sx={{ mt: 2, height: 50, borderRadius: 8, fontWeight: 600 }}
               >
                 View Savings List
               </Button>
@@ -174,11 +175,11 @@ function App() {
             />
 
             <Button
-              variant="outlined"
+              variant="contained"
               color="secondary"
               onClick={() => setCurrentSaving(null)}
               fullWidth
-              sx={{ mt: 2, height: 50 }}
+              sx={{ mt: 2, height: 50, borderRadius: 8, fontWeight: 600 }}
             >
               Back to Savings List
             </Button>
@@ -188,13 +189,12 @@ function App() {
 
       <BottomBar onAddClick={() => setCurrentSaving(null)} onMenuClick={toggleDrawer} />
 
-      {/* Drawer for mobile menu */}
       <Drawer anchor="bottom" open={drawerOpen} onClose={toggleDrawer}>
         <Box sx={{ width: "100%", padding: 2 }}>
           <Typography
             variant="h6"
             gutterBottom
-            sx={{ fontSize: { xs: "1.5rem", sm: "1.75rem" } }}
+            sx={{ fontSize: { xs: "1.5rem", sm: "1.75rem" }, fontWeight: 500 }}
           >
             Savings List
           </Typography>
@@ -223,34 +223,41 @@ function App() {
                   key={index}
                   onClick={() => {
                     setCurrentSaving(saving);
-                    setDrawerOpen(false); // Close drawer on selection
+                    setDrawerOpen(false);
                   }}
-                  sx={{ padding: 2, alignItems: "center" }}
+                  sx={{ padding: 2, alignItems: 'center', borderRadius: 8, boxShadow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
                 >
-                  <Box sx={{ flex: 1 }}>
-                    <ListItemText
-                      primary={saving.name}
-                      sx={{ fontSize: { xs: "1.2rem", sm: "1.25rem" } }}
-                    />
-                    <Box sx={{ width: "100%", mt: 1 }}>
-                      <LinearProgress
-                        variant="determinate"
-                        value={progressValue}
-                        color={barColor}
-                        sx={{ height: 10, borderRadius: 5, width: "33%" }}
+                  <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                    <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <ListItemText
+                        primary={saving.name}
+                        secondary={`Due: ${new Date(saving.dueDate).toLocaleDateString()}`}
+                        sx={{ fontSize: { xs: "1.2rem", sm: "1.25rem" }, fontWeight: 400 }}
                       />
+                      <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                        <LinearProgress
+                          variant="determinate"
+                          value={progressValue}
+                          color={barColor}
+                          sx={{ height: 6, borderRadius: 4, flexGrow: 1 }}
+                        />
+                      </Box>
                     </Box>
+                    <Typography variant="body2" sx={{ ml: 2 }}>
+                      ${saving.savedAmount} / ${saving.goal}
+                    </Typography>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteSavings(saving.name);
+                      }}
+                      sx={{ flexShrink: 0 }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </Box>
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteSavings(saving.name);
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
                 </ListItem>
               );
             })}
@@ -258,7 +265,6 @@ function App() {
         </Box>
       </Drawer>
 
-      {/* Snackbar for notifications */}
       <Snackbar
         open={notificationOpen}
         autoHideDuration={6000}

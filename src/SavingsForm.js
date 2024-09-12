@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Button, TextField, Box, Typography } from "@mui/material";
 
+const buttonStyles = {
+  height: 50,
+  borderRadius: 8,
+  fontWeight: 600,
+  fontSize: { xs: "1rem", sm: "1.125rem" },
+};
+
 const SavingsForm = ({ onFormSubmit }) => {
   const [name, setName] = useState("");
   const [goal, setGoal] = useState("");
@@ -58,7 +65,7 @@ const SavingsForm = ({ onFormSubmit }) => {
         required
       />
 
-      <Button type="submit" variant="contained" color="primary">
+      <Button type="submit" variant="contained" color="primary" sx={buttonStyles}>
         Create Savings Goal
       </Button>
     </Box>

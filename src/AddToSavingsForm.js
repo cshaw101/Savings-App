@@ -38,7 +38,7 @@ const AddToSavingsForm = ({ onAddToSavings, onSubtractFromSavings }) => {
       <Box sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" }, mt: 2 }}>
         <Button
           variant="contained"
-          color="primary"
+          color="success"  // Green color
           onClick={handleAdd}
           fullWidth
           sx={{ height: 50, fontSize: { xs: "1rem", sm: "1.125rem" } }}
@@ -48,7 +48,7 @@ const AddToSavingsForm = ({ onAddToSavings, onSubtractFromSavings }) => {
 
         <Button
           variant="contained"
-          color="secondary"
+          color="error"  // Red color
           onClick={handleSubtract}
           fullWidth
           sx={{ height: 50, fontSize: { xs: "1rem", sm: "1.125rem" } }}

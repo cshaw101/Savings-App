@@ -181,20 +181,21 @@ function App() {
               goal={currentSaving.goal}
               dueDate={currentSaving.dueDate}
               savedAmount={currentSaving.savedAmount}
+              name={currentSaving.name}
             />
             <AddToSavingsForm
               onAddToSavings={handleAddToSavings}
               onSubtractFromSavings={handleSubtractFromSavings}
             />
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => setCurrentSaving(null)}
-              fullWidth
-              sx={{ mt: 2, height: 50, borderRadius: 8, fontWeight: 600 }}
-            >
-              Back to Savings List
-            </Button>
+          <Button
+  variant="contained"
+  color="primary"  // Blue color
+  onClick={() => setCurrentSaving(null)}
+  fullWidth
+  sx={{ mt: 2, height: 50, borderRadius: 8, fontWeight: 600 }}
+>
+  Back to Savings List
+</Button>
           </>
         )}
       </Container>

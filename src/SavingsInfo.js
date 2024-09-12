@@ -18,10 +18,10 @@ const calculateEffectiveDaysLeft = (dueDate, nonWorkingDates) => {
     }
   }
 
-  return effectiveDaysLeft;
+  return effectiveDaysLeft; 
 };
 
-const SavingsInfo = ({ goal, dueDate, savedAmount }) => {
+const SavingsInfo = ({ name, goal, dueDate, savedAmount }) => {
   const [nonWorkingDates, setNonWorkingDates] = useState([]);
   const [newNonWorkingDate, setNewNonWorkingDate] = useState("");
   const [showNonWorkingDates, setShowNonWorkingDates] = useState(false);
@@ -69,7 +69,7 @@ const SavingsInfo = ({ goal, dueDate, savedAmount }) => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
-      <Typography variant="h5">Savings Goal</Typography>
+      <Typography variant="h5">{name}</Typography>
 
       <Typography variant="body1">
         <strong>Due Date:</strong> {dueDate}

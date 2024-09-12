@@ -27,7 +27,8 @@ const SavingsForm = ({ onFormSubmit }) => {
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}
+      sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2, padding: 2 }}
+      className="glassmorphism"
     >
       <Typography variant="h5" gutterBottom>
         Create New Savings Goal
@@ -53,20 +54,25 @@ const SavingsForm = ({ onFormSubmit }) => {
         type="date"
         value={dueDate}
         onChange={(e) => setDueDate(e.target.value)}
-        InputLabelProps={{ shrink: true }}
         required
+        InputLabelProps={{ shrink: true }}
       />
 
       <TextField
-        label="Amount Saved So Far ($)"
+        label="Saved Amount ($)"
         type="number"
         value={savedAmount}
         onChange={(e) => setSavedAmount(e.target.value)}
         required
       />
 
-      <Button type="submit" variant="contained" color="primary" sx={buttonStyles}>
-        Create Savings Goal
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        sx={buttonStyles}
+      >
+        Add Savings Goal
       </Button>
     </Box>
   );

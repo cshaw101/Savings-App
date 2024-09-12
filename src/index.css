@@ -2,8 +2,7 @@ body, html {
   height: 100%;
   margin: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: #f5f5f5;
-  background: linear-gradient(to bottom right, #ece9e6, #ffffff); /* Gradient background */
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,4 +15,18 @@ body, html {
   align-items: center;
   width: 100%;
   background-color: transparent;
+}
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+  border-radius: 12px;
+  backdrop-filter: blur(10px); /* Adjust blur level as needed */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Optional: border for better definition */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for 3D effect */
+}
+.scrollable-section {
+  max-height: 150px; /* Adjust the height as needed */
+  overflow-y: auto;  /* Enables vertical scrolling */
+  margin-top: 16px;  /* Space above the scrollable section */
+  border: 1px solid #ccc; /* Optional: border for better visibility */
+  padding: 8px; /* Optional: padding for spacing */
 }

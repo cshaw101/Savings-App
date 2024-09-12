@@ -118,21 +118,41 @@ const SavingsInfo = ({ goal, dueDate, savedAmount }) => {
           >
             Add
           </Button>
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="body1" sx={{ mb: 1 }}>Non-Working Dates:</Typography>
-            {nonWorkingDates.map(date => (
-              <Box key={date} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                <Typography variant="body2" sx={{ flexGrow: 1 }}>{date}</Typography>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => handleRemoveNonWorkingDate(date)}
-                >
-                  Remove
-                </Button>
-              </Box>
-            ))}
-          </Box>
+          {/* Non-Working Dates List */}
+          {nonWorkingDates.length > 2 && (
+            <Box sx={{ mt: 2 }} className="scrollable-section">
+              <Typography variant="body1" sx={{ mb: 1 }}>Non-Working Dates:</Typography>
+              {nonWorkingDates.map(date => (
+                <Box key={date} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="body2" sx={{ flexGrow: 1 }}>{date}</Typography>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => handleRemoveNonWorkingDate(date)}
+                  >
+                    Remove
+                  </Button>
+                </Box>
+              ))}
+            </Box>
+          )}
+          {nonWorkingDates.length <= 2 && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body1" sx={{ mb: 1 }}>Non-Working Dates:</Typography>
+              {nonWorkingDates.map(date => (
+                <Box key={date} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="body2" sx={{ flexGrow: 1 }}>{date}</Typography>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => handleRemoveNonWorkingDate(date)}
+                  >
+                    Remove
+                  </Button>
+                </Box>
+              ))}
+            </Box>
+          )}
         </Box>
       </Collapse>
 

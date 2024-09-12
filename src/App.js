@@ -29,12 +29,6 @@ function App() {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationSeverity, setNotificationSeverity] = useState("success");
 
-  const buttonStyles = {
-    height: 50,
-    borderRadius: 8,
-    fontWeight: 600,
-    fontSize: { xs: "1rem", sm: "1.125rem" },
-  };
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -135,7 +129,7 @@ function App() {
 
   return (
     <>
-      <Container maxWidth="sm" sx={{ padding: 2, paddingBottom: "64px" }}>
+      <Container maxWidth="sm" sx={{ padding: 2, paddingBottom: "64px" }} className="glassmorphism">
         <Typography
           variant="h4"
           align="center"
@@ -148,7 +142,6 @@ function App() {
         {currentSaving === null ? (
           <>
             <SavingsForm onFormSubmit={handleFormSubmit} />
-
             {!isMobile && (
               <Button
                 variant="contained"
@@ -168,12 +161,10 @@ function App() {
               dueDate={currentSaving.dueDate}
               savedAmount={currentSaving.savedAmount}
             />
-
             <AddToSavingsForm
               onAddToSavings={handleAddToSavings}
               onSubtractFromSavings={handleSubtractFromSavings}
             />
-
             <Button
               variant="contained"
               color="secondary"
@@ -190,7 +181,7 @@ function App() {
       <BottomBar onAddClick={() => setCurrentSaving(null)} onMenuClick={toggleDrawer} />
 
       <Drawer anchor="bottom" open={drawerOpen} onClose={toggleDrawer}>
-        <Box sx={{ width: "100%", padding: 2 }}>
+        <Box sx={{ width: "100%", padding: 2 }} className="glassmorphism">
           <Typography
             variant="h6"
             gutterBottom
@@ -225,7 +216,7 @@ function App() {
                     setCurrentSaving(saving);
                     setDrawerOpen(false);
                   }}
-                  sx={{ padding: 2, alignItems: 'center', borderRadius: 8, boxShadow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+                  sx={{ padding: 2, alignItems: 'center', borderRadius: 8, boxShadow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.1)' }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                     <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, LinearProgress, TextField, Button, Collapse } from "@mui/material";
 
+// Helper functions to manage non-working dates
 const isExcludedDate = (date, nonWorkingDates) => {
   const formattedDate = date.toISOString().split('T')[0];
   return nonWorkingDates.includes(formattedDate);
@@ -159,7 +160,7 @@ const SavingsInfo = ({ goal, dueDate, savedAmount }) => {
       {/* Progress Bar */}
       <Box sx={{ width: '100%' }}>
         <Typography variant="body2" sx={{ mb: 1 }}>
-          {`$${savedAmountFloat} / $${goalAmount}`}
+          ${savedAmountFloat} / ${goalAmount}
         </Typography>
         <LinearProgress
           variant="determinate"

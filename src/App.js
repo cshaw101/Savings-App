@@ -29,26 +29,40 @@ function App() {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationSeverity, setNotificationSeverity] = useState("success");
 
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    const storedSavings = localStorage.getItem("savingsList");
-    if (storedSavings) {
-      setSavingsList(JSON.parse(storedSavings));
-    } else {
-      setSavingsList([]);
+    try {
+      const storedSavings = localStorage.getItem("savingsList");
+      if (storedSavings) {
+        const parsedSavings = JSON.parse(storedSavings);
+        if (Array.isArray(parsedSavings)) {
+          setSavingsList(parsedSavings);
+        } else {
+          console.error("Stored savings is not an array");
+        }
+      }
+    } catch (error) {
+      console.error("Error reading from local storage:", error);
     }
   }, []);
-
+  
   useEffect(() => {
-    localStorage.setItem("savingsList", JSON.stringify(savingsList));
+    try {
+      if (savingsList.length > 0) {
+        localStorage.setItem("savingsList", JSON.stringify(savingsList));
+      }
+    } catch (error) {
+      console.error("Error writing to local storage:", error);
+    }
   }, [savingsList]);
+  
+  
 
   const handleFormSubmit = (name, goalAmount, goalDueDate, savedAmount) => {
     const isDuplicate = savingsList.some((saving) => saving.name === name);
-
+  
     if (isDuplicate) {
       setNotificationMessage(`A saving with the name "${name}" already exists!`);
       setNotificationSeverity("error");
@@ -62,50 +76,57 @@ function App() {
       dueDate: goalDueDate,
       savedAmount,
     };
-    setSavingsList([...savingsList, newSaving]);
+    const updatedSavingsList = [...savingsList, newSaving];
+    setSavingsList(updatedSavingsList);
     setNotificationMessage(`${name} successfully created!`);
     setNotificationSeverity("success");
     setNotificationOpen(true);
   };
 
   const handleAddToSavings = (amount) => {
-    const updatedSaving = {
-      ...currentSaving,
-      savedAmount: parseFloat(currentSaving.savedAmount) + parseFloat(amount),
-    };
+    if (currentSaving) {
+      const updatedSaving = {
+        ...currentSaving,
+        savedAmount: parseFloat(currentSaving.savedAmount) + parseFloat(amount),
+      };
 
-    const updatedSavingsList = savingsList.map((saving) =>
-      saving.name === currentSaving.name ? updatedSaving : saving
-    );
+      const updatedSavingsList = savingsList.map((saving) =>
+        saving.name === currentSaving.name ? updatedSaving : saving
+      );
 
-    setSavingsList(updatedSavingsList);
-    setCurrentSaving(updatedSaving);
-    setNotificationMessage("Great Job! Keep it up!");
-    setNotificationSeverity("success");
-    setNotificationOpen(true);
+      setSavingsList(updatedSavingsList);
+      setCurrentSaving(updatedSaving);
+      setNotificationMessage("Great Job! Keep it up!");
+      setNotificationSeverity("success");
+      setNotificationOpen(true);
+    }
   };
 
   const handleSubtractFromSavings = (amount) => {
-    const updatedSaving = {
-      ...currentSaving,
-      savedAmount: Math.max(0, parseFloat(currentSaving.savedAmount) - parseFloat(amount)),
-    };
+    if (currentSaving) {
+      const updatedSaving = {
+        ...currentSaving,
+        savedAmount: Math.max(0, parseFloat(currentSaving.savedAmount) - parseFloat(amount)),
+      };
 
-    const updatedSavingsList = savingsList.map((saving) =>
-      saving.name === currentSaving.name ? updatedSaving : saving
-    );
+      const updatedSavingsList = savingsList.map((saving) =>
+        saving.name === currentSaving.name ? updatedSaving : saving
+      );
 
-    setSavingsList(updatedSavingsList);
-    setCurrentSaving(updatedSaving);
-    setNotificationMessage("Hope to See you Again!");
-    setNotificationSeverity("info");
-    setNotificationOpen(true);
+      setSavingsList(updatedSavingsList);
+      setCurrentSaving(updatedSaving);
+      setNotificationMessage("Hope to See you Again!");
+      setNotificationSeverity("info");
+      setNotificationOpen(true);
+    }
   };
 
   const handleDeleteSavings = (name) => {
     const updatedSavingsList = savingsList.filter((saving) => saving.name !== name);
     setSavingsList(updatedSavingsList);
-    setCurrentSaving(null);
+    if (currentSaving && currentSaving.name === name) {
+      setCurrentSaving(null);
+    }
   };
 
   const toggleDrawer = () => {
@@ -234,21 +255,21 @@ function App() {
                         />
                       </Box>
                     </Box>
-                    <Typography variant="body2" sx={{ ml: 2 }}>
-                      ${saving.savedAmount} / ${saving.goal}
+                    <Typography variant="body2" sx={{ flexShrink: 0, marginLeft: 2 }}>
+                      {saving.savedAmount} / {saving.goal}
                     </Typography>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteSavings(saving.name);
-                      }}
-                      sx={{ flexShrink: 0 }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
                   </Box>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteSavings(saving.name);
+                    }}
+                    sx={{ color: 'error.main' }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
                 </ListItem>
               );
             })}
@@ -260,16 +281,11 @@ function App() {
         open={notificationOpen}
         autoHideDuration={6000}
         onClose={handleCloseNotification}
-        action={
-          <Button color="inherit" onClick={handleCloseNotification}>
-            Close
-          </Button>
-        }
       >
         <Alert
           onClose={handleCloseNotification}
           severity={notificationSeverity}
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {notificationMessage}
         </Alert>
